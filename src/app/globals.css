@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/* 디자인 토큰: 밝은 배경 + 포인트 컬러 1개 */
+@theme {
+  --color-background: #f7f5f2;
+  --color-surface: #ffffff;
+  --color-ink: #1f1d1a;
+  --color-muted: #7d766f;
+  --color-border: #e7e2dc;
+  --color-accent: #e5573b;
+  --color-accent-strong: #c2412a;
+  --color-accent-soft: #fdeee9;
+  --color-success: #2f8f5b;
+  --color-warning-soft: #fff4e0;
+
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+    "Segoe UI", sans-serif;
+
+  --animate-fade-in: fade-in 180ms ease-out;
+  --animate-sheet-up: sheet-up 240ms cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes sheet-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--color-background);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
