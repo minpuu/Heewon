@@ -44,7 +44,8 @@ export function usePickSession({ candidates, scope, fixedId }: PickSessionOption
     historyReset: false,
     sameAsPrevious: false,
   });
-  const initialized = useRef(false);
+  /** 마지막으로 뽑기를 수행한 후보 목록. 목록이 바뀌면(예: 제외 조건 변경) 다시 뽑는다. */
+  const pickedFrom = useRef<Candidate[] | null>(null);
 
   const applyPick = useCallback(
     (list: Candidate[]) => {
@@ -69,8 +70,8 @@ export function usePickSession({ candidates, scope, fixedId }: PickSessionOption
   );
 
   useEffect(() => {
-    if (candidates === null || initialized.current) return;
-    initialized.current = true;
+    if (candidates === null || pickedFrom.current === candidates) return;
+    pickedFrom.current = candidates;
 
     const fixed = fixedId ? candidates.find((c) => c.restaurant.id === fixedId) : undefined;
     if (fixed) {

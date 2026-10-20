@@ -22,7 +22,8 @@ interface ListScreenProps {
 export function ListScreen({ walkMinutes }: ListScreenProps) {
   const router = useRouter();
   const { status, location } = useLocation();
-  const { settings, loaded } = useExclusionSettings();
+  const { settings, update, loaded } = useExclusionSettings();
+  const anyExclusion = settings.excludeRaw || settings.excludeHighWaiting;
   const nearby = useNearbyCandidates(location?.coords ?? null);
   const [category, setCategory] = useState<CategoryFilter>("all");
   const [selected, setSelected] = useState<Candidate | null>(null);
@@ -103,8 +104,21 @@ export function ListScreen({ walkMinutes }: ListScreenProps) {
       {totalEmpty ? (
         <StatePanel
           title="조건에 맞는 식당이 없어요"
-          description={`도보 ${walkMinutes}분 이내에 제외 조건을 통과한 식당이 없어요. 거리를 바꿔 보세요.`}
+          description={
+            anyExclusion
+              ? `도보 ${walkMinutes}분 이내에서 제외 조건을 통과한 식당이 없어요. 확인되지 않은 정보는 제외 대상이라 결과가 줄 수 있어요.`
+              : `도보 ${walkMinutes}분 이내에 식당이 없어요. 거리를 바꿔 보세요.`
+          }
         >
+          {anyExclusion && (
+            <button
+              type="button"
+              onClick={() => update({ excludeRaw: false, excludeHighWaiting: false })}
+              className="flex h-12 items-center justify-center rounded-2xl border border-border bg-surface font-semibold text-ink active:bg-background"
+            >
+              제외 조건 끄고 다시 보기
+            </button>
+          )}
           <Link href="/" className="flex h-12 items-center justify-center rounded-2xl bg-ink font-semibold text-white">
             거리 다시 선택하기
           </Link>
