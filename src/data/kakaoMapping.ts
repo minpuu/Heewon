@@ -12,6 +12,8 @@ export interface KakaoPlace {
   place_url: string;
 }
 
+const NON_MEAL_SEGMENTS = new Set(["술집", "카페"]);
+
 const CUISINE_BY_SEGMENT: Record<string, FoodCategory> = {
   한식: "korean",
   중식: "chinese",
@@ -32,6 +34,8 @@ export function toRestaurantFromKakaoPlace(place: KakaoPlace): Restaurant | null
 
   // 예: "음식점 > 한식 > 육류,고기 > 돼지고기"
   const segments = place.category_name.split(">").map((segment) => segment.trim());
+  // 점심 식사 후보가 아닌 업종은 제외한다.
+  if (NON_MEAL_SEGMENTS.has(segments[1] ?? "")) return null;
   const category = CUISINE_BY_SEGMENT[segments[1] ?? ""] ?? "other";
   const subcategory = segments.length > 2 ? segments[segments.length - 1] : undefined;
 

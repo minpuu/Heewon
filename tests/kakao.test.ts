@@ -36,7 +36,6 @@ describe("toRestaurantFromKakaoPlace", () => {
     ["음식점 > 중식 > 중국요리", "chinese"],
     ["음식점 > 일식 > 초밥,롤", "japanese"],
     ["음식점 > 양식 > 스테이크", "western"],
-    ["음식점 > 카페 > 커피전문점", "other"],
     ["음식점", "other"],
   ])("maps %s to %s", (categoryName, expected) => {
     expect(toRestaurantFromKakaoPlace(place({ category_name: categoryName }))?.category).toBe(expected);
@@ -53,6 +52,10 @@ describe("toRestaurantFromKakaoPlace", () => {
     expect(r?.highWaitingRisk).toBeNull();
     expect(r?.openStatus).toBe("unknown");
     expect(r?.representativeMenu).toBeUndefined();
+  });
+
+  it.each(["음식점 > 술집 > 호프,요리주점", "음식점 > 카페 > 커피전문점"])("drops non-meal venue %s", (categoryName) => {
+    expect(toRestaurantFromKakaoPlace(place({ category_name: categoryName }))).toBeNull();
   });
 
   it("drops places with unusable coordinates", () => {
