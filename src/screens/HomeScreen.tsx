@@ -91,7 +91,6 @@ export function HomeScreen() {
 
       <div className="fixed inset-x-0 bottom-0 z-10 mx-auto w-full max-w-[440px] bg-linear-to-t from-background via-background to-background/0 px-5 pt-6 pb-[calc(env(safe-area-inset-bottom)+20px)]">
         <p className="mb-3 text-center text-[11px] text-muted">
-          샘플 데이터 · 실제 영업 정보가 아니에요 ·{" "}
           <button type="button" onClick={() => setSamplePolicyOpen(true)} className="underline underline-offset-2">
             도보 시간 안내
           </button>

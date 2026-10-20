@@ -6,11 +6,17 @@ import { pickRandomRestaurant } from "@/domain/pick";
 import { DEFAULT_EXCLUSIONS, exclusionKey } from "@/domain/exclusions";
 import { buildWalkingDirectionsUrl } from "@/domain/mapLink";
 import type { Candidate, Restaurant } from "@/domain/types";
-import { getNearbyRestaurants } from "@/services/getNearbyRestaurants";
+import { getNearbyRestaurants, type NearbyDependencies } from "@/services/getNearbyRestaurants";
 import { MockRestaurantProvider } from "@/data/mockRestaurantProvider";
 import { MOCK_RESTAURANTS } from "@/data/mockRestaurants";
 import { PRESET_LOCATIONS } from "@/data/presetLocations";
 import { parseWalkMinutes } from "@/config/app";
+import { EstimatedWalkingRouteProvider as RouteProvider } from "@/domain/walking";
+
+const mockDependencies: NearbyDependencies = {
+  restaurants: new MockRestaurantProvider(),
+  routes: new RouteProvider(),
+};
 
 const ORIGIN = { latitude: 37.5443, longitude: 126.9516 };
 
@@ -201,7 +207,7 @@ describe("exclusionKey", () => {
 
 describe("getNearbyRestaurants (mock data)", () => {
   it("returns candidates with walking info, sorted by walking distance", async () => {
-    const candidates = await getNearbyRestaurants(ORIGIN);
+    const candidates = await getNearbyRestaurants(ORIGIN, mockDependencies);
     expect(candidates.length).toBeGreaterThan(0);
     for (let i = 1; i < candidates.length; i++) {
       expect(candidates[i].walk.meters).toBeGreaterThanOrEqual(candidates[i - 1].walk.meters);
@@ -215,13 +221,13 @@ describe("getNearbyRestaurants (mock data)", () => {
   });
 
   it("has a closed restaurant that is filtered out for a 15 minute search", async () => {
-    const candidates = await getNearbyRestaurants(ORIGIN);
+    const candidates = await getNearbyRestaurants(ORIGIN, mockDependencies);
     const result = filterRestaurants(candidates, { maxWalkMinutes: 15, ...DEFAULT_EXCLUSIONS });
     expect(result.some((c) => c.restaurant.openStatus === "closed")).toBe(false);
   });
 
   it("returns nothing for a far-away origin (empty state path)", async () => {
-    const candidates = await getNearbyRestaurants({ latitude: 35.1, longitude: 129.0 });
+    const candidates = await getNearbyRestaurants({ latitude: 35.1, longitude: 129.0 }, mockDependencies);
     expect(candidates).toEqual([]);
   });
 

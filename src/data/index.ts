@@ -1,11 +1,10 @@
 import type { WalkingRouteProvider } from "@/domain/walking";
 import { EstimatedWalkingRouteProvider } from "@/domain/walking";
-import { MockRestaurantProvider } from "./mockRestaurantProvider";
+import { HttpRestaurantProvider } from "./httpRestaurantProvider";
 import type { RestaurantProvider } from "./restaurantProvider";
 
 /**
- * 현재는 Mock 제공자만 사용한다.
- * 실제 장소·경로 API를 연결하면 여기서 교체한다. (API 키는 서버 측 환경변수로만 다룬다.)
+ * 브라우저가 쓰는 식당 제공자. 실제 데이터 소스는 서버 라우트에서 고른다 (serverRestaurantProvider.ts).
  */
-export const restaurantProvider: RestaurantProvider = new MockRestaurantProvider();
+export const restaurantProvider: RestaurantProvider = new HttpRestaurantProvider("/api/restaurants/nearby");
 export const walkingRouteProvider: WalkingRouteProvider = new EstimatedWalkingRouteProvider();
