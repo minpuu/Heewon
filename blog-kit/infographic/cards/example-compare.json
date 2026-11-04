@@ -1,0 +1,9 @@
+{
+  "type": "compare",
+  "kicker": "예시 · 통신비",
+  "title": "알뜰폰으로 옮기고 **한 달 통신비**",
+  "left": { "tag": "BEFORE", "label": "통신사 요금제", "value": "69,000", "unit": "원", "sub": "가족결합 할인 포함" },
+  "right": { "tag": "AFTER", "label": "알뜰폰 요금제", "value": "19,800", "unit": "원", "sub": "데이터 15GB" },
+  "note": "1년이면 **약 59만 원** 절약",
+  "source": "예시 데이터 (실제 내 요금으로 바꿔 쓰세요)"
+}

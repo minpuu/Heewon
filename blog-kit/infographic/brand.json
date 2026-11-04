@@ -1,0 +1,15 @@
+{
+  "blogName": "2030 돈 챙김 기록",
+  "handle": "blog.naver.com/내아이디",
+  "colors": {
+    "bg": "#F6F4EE",
+    "card": "#FFFFFF",
+    "ink": "#1C2420",
+    "muted": "#6B736E",
+    "line": "#E5E2D9",
+    "primary": "#1E7F5C",
+    "primarySoft": "#DCEFE5",
+    "accent": "#E8A33D",
+    "accentSoft": "#FBEFD9"
+  }
+}
