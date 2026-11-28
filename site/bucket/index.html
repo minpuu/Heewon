@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FAF6EE">
+<title>버킷리스트 · 나의 노트</title>
+<meta name="description" content="올해 남은 한 달, 내년, 그리고 인생 전체의 버킷리스트. 종이 노트처럼 쓰고, 기기 사이에서 조용히 동기화되는 개인 전용 페이지.">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="버킷리스트">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="format-detection" content="telephone=no">
+<meta name="robots" content="noindex, nofollow">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="style.css?v=9">
+<script>
+  // 화면 안에서 난 스크립트 오류를 조용히 모아 둡니다(자체 점검용).
+  window.__hwErrors = [];
+  window.addEventListener('error', function (e) { window.__hwErrors.push(String((e && e.message) || e)); });
+  window.addEventListener('unhandledrejection', function (e) { window.__hwErrors.push('unhandled: ' + String(e && e.reason)); });
+</script>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- ── 잠금 화면 (가죽 표지) ──────────────────────────────── -->
+  <section class="lock" id="lockView" hidden>
+    <div class="lock-inner">
+      <div class="lock-card">
+        <p class="lock-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="11" width="14" height="9" rx="1.6"></rect>
+            <path d="M8.5 11V8.2a3.5 3.5 0 0 1 7 0V11"></path>
+            <path d="M12 14.6v2"></path>
+          </svg>
+        </p>
+        <h1 class="lock-title">나만의 버킷리스트</h1>
+        <p class="lock-sub">이 노트는 주인만 펼칠 수 있어요.<br>한 번 연결하면 이 기기에서는 바로 열립니다.</p>
+
+        <form class="lock-form" id="lockForm" novalidate>
+          <label class="field">
+            <span class="field-label">GitHub Gist 토큰</span>
+            <span class="input-row">
+              <input id="tokenInput" type="password" name="token" placeholder="ghp_… 또는 github_pat_…"
+                     autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text">
+              <button type="button" class="peek" id="tokenPeek" aria-label="토큰 보기">보기</button>
+            </span>
+            <span class="field-hint">이 기기의 브라우저에만 저장되고, GitHub에만 전송돼요.</span>
+          </label>
+
+          <label class="field">
+            <span class="field-label">Gist ID <span class="opt">선택</span></span>
+            <input id="gistInput" type="text" name="gist" placeholder="비워 두면 새로 만들어요"
+                   autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text">
+            <span class="field-hint">쓰던 노트가 있으면 붙여넣으세요. 비워 두면 새로 만들어요.</span>
+          </label>
+
+          <p class="lock-msg" id="lockMsg" role="alert" hidden></p>
+
+          <button class="btn btn-paper btn-block" id="connectBtn" type="submit">연결하고 열기</button>
+        </form>
+
+        <div class="lock-alt">
+          <p class="lock-or"><span>또는</span></p>
+          <button class="btn btn-quiet btn-block" id="localStartBtn" type="button">토큰 없이 이 기기에서 바로 시작하기</button>
+          <p class="lock-alt-note">이 기기의 브라우저에만 저장돼요. 나중에 <b>⋯</b> → 클라우드 동기화 연결하기로 적어 둔 줄을 그대로 올릴 수 있어요.</p>
+        </div>
+
+        <details class="how" id="howBox">
+          <summary>토큰은 어떻게 만들죠?</summary>
+          <ol class="how-list">
+            <li><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">새 토큰 만들기</a>를 엽니다.</li>
+            <li>Token name에 <b>버킷리스트</b>, Expiration은 <b>1년</b> 정도로 정합니다.</li>
+            <li>Resource owner는 <b>minpuu</b>, Repository access는 <b>Public repositories</b> 그대로 둡니다.</li>
+            <li><b>Account permissions → Gists</b>를 <b>Read and write</b>로 켜고 Generate token을 누릅니다.</li>
+            <li>한 번만 보이는 <code>github_pat_…</code>를 복사해 위 칸에 붙여넣습니다.</li>
+          </ol>
+          <p class="how-note">간단한 대안은 <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener">classic 토큰</a>에서 <code>gist</code> 하나만 체크하는 방법입니다(<code>ghp_…</code>). 이 토큰은 다른 곳에 쓰지 마세요.</p>
+        </details>
+      </div>
+      <p class="lock-foot">아이폰·맥북 어디서 펼쳐도 같은 노트가 보여요.</p>
+    </div>
+  </section>
+
+  <!-- ── 메인 화면 ──────────────────────────────────────────── -->
+  <section class="main" id="mainView" hidden>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <span class="brand">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5.5 3.8h11.2a2 2 0 0 1 2 2v13.4a1.6 1.6 0 0 1-1.6 1.6H5.5z"></path>
+              <path d="M5.5 3.8v17.4"></path>
+              <path d="M9 8.2h6.2M9 11.6h6.2M9 15h3.6"></path>
+            </svg>
+          </span>
+          <span class="brand-text">버킷리스트</span>
+        </span>
+        <div class="topbar-tools">
+          <button type="button" class="sync-pill" id="syncPill" data-state="idle" aria-live="polite" title="눌러서 새로고침">
+            <span class="sync-dot" aria-hidden="true"></span>
+            <span class="sync-text" id="syncText">연결 중…</span>
+          </button>
+          <button type="button" class="icon-btn" id="refreshBtn" aria-label="새로고침" title="새로고침">
+            <span aria-hidden="true">↻</span>
+          </button>
+          <details class="menu" id="menu">
+            <summary class="icon-btn" aria-label="설정" title="설정"><span aria-hidden="true">⋯</span></summary>
+            <div class="menu-panel">
+              <p class="menu-title" id="menuStorageTitle">저장소</p>
+              <p class="menu-gist" id="menuGist">—</p>
+              <div class="menu-actions">
+                <button type="button" class="menu-item" id="copyGistBtn">저장소 ID 복사</button>
+                <button type="button" class="menu-item is-cloud" id="cloudBtn" hidden>클라우드 동기화 연결하기</button>
+                <button type="button" class="menu-item" id="exportBtn">JSON 내보내기</button>
+                <button type="button" class="menu-item" id="importBtn">JSON 불러오기(복원)</button>
+                <button type="button" class="menu-item is-lock" id="lockBtn">잠그기 (토큰 지우기)</button>
+                <div class="menu-confirm" id="lockConfirm" hidden>
+                  <p>토큰을 지우고 잠글까요?<br><span>다시 열려면 토큰을 새로 넣어야 해요.</span></p>
+                  <div class="menu-confirm-acts">
+                    <button type="button" class="menu-item" id="lockCancel">취소</button>
+                    <button type="button" class="menu-item is-lock" id="lockOk">잠그기</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="menu-connect" id="cloudBox" hidden>
+                <label class="menu-field">
+                  <span>GitHub Gist 토큰</span>
+                  <input id="menuToken" type="password" placeholder="ghp_… 또는 github_pat_…"
+                         autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+                </label>
+                <label class="menu-field">
+                  <span>Gist ID <i class="opt">선택</i></span>
+                  <input id="menuGistInput" type="text" placeholder="비워 두면 새로 만들어요"
+                         autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+                </label>
+                <p class="menu-err" id="menuErr" role="alert" hidden></p>
+                <button type="button" class="menu-connect-go" id="menuConnectBtn">연결하고 올리기</button>
+                <p class="menu-hint" id="cloudHint"></p>
+              </div>
+
+              <input type="file" id="importFile" accept="application/json,.json" hidden>
+              <p class="menu-note" id="menuNote">다른 기기에서는 같은 토큰과 위 저장소 ID를 넣으면 이어집니다.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <p class="preview-note" id="previewNote" hidden>미리보기 모드 · 아무것도 저장되지 않아요</p>
+
+      <section class="summary" aria-labelledby="summaryTitle">
+        <div class="summary-head">
+          <div>
+            <h2 class="summary-title" id="summaryTitle">올해 남은 한 달</h2>
+            <p class="summary-sub" id="summarySub">2026</p>
+          </div>
+          <p class="summary-count" id="summaryCount"><strong>0</strong> / 0 <span>달성</span></p>
+        </div>
+        <div class="bar" role="img" aria-label="올해 달성률" id="yearBar"><span></span></div>
+        <p class="summary-days" id="summaryDays"></p>
+        <dl class="summary-grid">
+          <div><dt>전체</dt><dd id="stAll">0 / 0</dd></div>
+          <div><dt>내년</dt><dd id="stYear27">0 / 0</dd></div>
+          <div><dt>언젠가</dt><dd id="stSomeday">0 / 0</dd></div>
+        </dl>
+      </section>
+
+      <form class="add" id="addForm" novalidate>
+        <div class="add-row">
+          <input class="add-input" id="addTitle" type="text" placeholder="이루고 싶은 것 한 줄" maxlength="80"
+                 autocomplete="off" enterkeyhint="done" aria-label="버킷리스트 제목">
+          <button class="btn btn-primary add-submit" type="submit">담기</button>
+        </div>
+        <input class="add-memo" id="addMemo" type="text" placeholder="짧은 메모 (선택)" maxlength="140"
+               autocomplete="off" aria-label="메모">
+        <div class="chips" id="addCats" role="group" aria-label="카테고리"></div>
+        <div class="chips chips-period" id="addPeriods" role="group" aria-label="목표 시기"></div>
+        <p class="add-error" id="addError" role="alert" hidden></p>
+      </form>
+
+      <nav class="filters" id="filters" aria-label="목록 필터"></nav>
+
+      <ul class="list" id="list"></ul>
+      <p class="empty" id="empty" hidden></p>
+    </main>
+
+    <footer class="foot">
+      <p id="footText">나의 버킷리스트 · 비공개 Gist에 자동 저장</p>
+    </footer>
+  </section>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+</div>
+
+<noscript>
+  <p style="max-width:640px;margin:32px auto;padding:0 20px;">이 페이지는 자바스크립트가 필요합니다. 사파리 설정에서 자바스크립트를 켜 주세요.</p>
+</noscript>
+
+<script src="app.js?v=10"></script>
+</body>
+</html>

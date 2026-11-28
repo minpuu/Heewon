@@ -1,0 +1,17 @@
+{
+  "name": "버킷리스트 · 나의 노트",
+  "short_name": "버킷리스트",
+  "description": "올해 남은 한 달, 내년, 그리고 인생 전체의 버킷리스트. 종이 노트처럼 쓰고, 기기 사이에서 조용히 동기화됩니다.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF6EE",
+  "theme_color": "#FAF6EE",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

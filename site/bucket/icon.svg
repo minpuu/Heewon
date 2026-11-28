@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="버킷리스트 노트">
+  <defs>
+    <linearGradient id="leather" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7C5539"/>
+      <stop offset="0.55" stop-color="#62422D"/>
+      <stop offset="1" stop-color="#513424"/>
+    </linearGradient>
+    <pattern id="linen" width="6" height="6" patternUnits="userSpaceOnUse">
+      <path d="M0 6 L6 0" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1"/>
+      <path d="M0 0 L6 6" stroke="#000000" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+    <pattern id="dots" width="23" height="23" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#B0A086" fill-opacity="0.45"/>
+    </pattern>
+  </defs>
+
+  <rect width="512" height="512" fill="url(#leather)"/>
+  <rect width="512" height="512" fill="url(#linen)"/>
+
+  <rect x="37" y="37" width="438" height="438" rx="22" fill="#FAF6EE"/>
+  <rect x="37" y="37" width="438" height="438" rx="22" fill="none" stroke="#D6C8B2" stroke-width="1.5"/>
+  <rect x="45" y="45" width="422" height="422" rx="16" fill="none" stroke="#E4D8C4" stroke-width="1"/>
+  <rect x="45" y="45" width="422" height="422" rx="16" fill="url(#dots)"/>
+
+  <path d="M82 150 H394" stroke="#D8C8AC" stroke-width="3" stroke-linecap="round"/>
+  <path d="M82 180 H320" stroke="#D8C8AC" stroke-width="3" stroke-linecap="round"/>
+
+  <path d="M168 280 L234 345 L350 226" fill="none" stroke="#2B2723" stroke-width="26"
+        stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M362 0 H400 V118 L381 96 L362 118 Z" fill="#C9A96E"/>
+  <path d="M400 0 H404 V118 L381 96 Z" fill="#000000" fill-opacity="0.12"/>
+</svg>
